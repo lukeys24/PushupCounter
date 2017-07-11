@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        
+
     }
 
     // Sets the references for buttons
