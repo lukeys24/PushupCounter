@@ -1,1 +1,1 @@
-First Android App, records how many pushups down using sensor and displays data for user
+First Android App, records how many pushups done using phone's proximity sensor and displays data for user
