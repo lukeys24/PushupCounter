@@ -1,6 +1,5 @@
 package com.lukeyseo.android.pushupcounter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -17,15 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
-
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -37,6 +32,8 @@ public class CountFragment extends Fragment implements SensorEventListener {
     private BootstrapButton mBeginButton;
     private AwesomeTextView mScoreView;
 
+    private static final String KEY_INDEX_PUSHUPS = "indexPushups";
+    private static final String KEY_INDEX_COUNTING = "indexCounting";
     private int mPushupCount = 0;
     private int mHighScore = 0;
     private boolean mCurrentlyCounting = false;
@@ -69,10 +66,29 @@ public class CountFragment extends Fragment implements SensorEventListener {
             }
         });
 
+        // Handles when we change orientations and recover previous ongoing count
+        if (savedInstanceState != null) {
+            mPushupCount = savedInstanceState.getInt(KEY_INDEX_PUSHUPS);
+            mCurrentlyCounting = savedInstanceState.getBoolean(KEY_INDEX_COUNTING);
+
+            if (mCurrentlyCounting) {
+                mBeginButton.setText("STOP");
+            } else {
+                mBeginButton.setText("Begin");
+            }
+        }
+
         restoreHighscore();
         updateScore();
 
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_INDEX_PUSHUPS, mPushupCount);
+        outState.putBoolean(KEY_INDEX_COUNTING, mCurrentlyCounting);
     }
 
     @Override

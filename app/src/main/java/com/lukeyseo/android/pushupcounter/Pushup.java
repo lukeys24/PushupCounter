@@ -9,7 +9,6 @@ import java.util.Date;
 public class Pushup {
     private Date mDate;
     private int mCount;
-    private double mTime;
 
     public Pushup() {
 
@@ -23,10 +22,6 @@ public class Pushup {
         return mCount;
     }
 
-    public double getTime() {
-        return mTime;
-    }
-
     public void setDate(Date mDate) {
         this.mDate = mDate;
     }
@@ -35,7 +30,4 @@ public class Pushup {
         this.mCount = mCount;
     }
 
-    public void setTime(double mTime) {
-        this.mTime = mTime;
-    }
 }
