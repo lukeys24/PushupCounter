@@ -20,6 +20,8 @@ import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -140,12 +142,13 @@ public class CountFragment extends Fragment implements SensorEventListener {
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
                             createDatabase();
                             addData(passInnerCount);
-                            getData();
+                            //getData();
                             sweetAlertDialog.dismissWithAnimation();
 
                             new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("Stored your results!")
                                     .show();
+
                         }
                     })
                     .setCancelText("No")
@@ -229,9 +232,9 @@ public class CountFragment extends Fragment implements SensorEventListener {
         // Checks we at least have 1 result
         if (cursor != null && (cursor.getColumnCount() > 0)) {
             do {
-                String id = cursor.getString(idColumn);
+                int id = cursor.getInt(idColumn);
                 String date = cursor.getString(dateColumn);
-                String count = cursor.getString(pushColumn);
+                int count = cursor.getInt(pushColumn);
 
                 dateList += id + " : " + date + " : " + count + "\n";
 

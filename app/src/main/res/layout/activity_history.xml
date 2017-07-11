@@ -16,12 +16,14 @@
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:text="List"
+            android:id="@+id/list_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10sp" />
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:text="Graph"
+            android:id="@+id/graph_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10sp"/>

@@ -7,14 +7,17 @@ import java.util.Date;
  */
 
 public class Pushup {
-    private Date mDate;
+    private int mId;
+    private String mDate;
     private int mCount;
 
     public Pushup() {
 
     }
 
-    public Date getDate() {
+    public int getId() { return mId; }
+
+    public String getDate() {
         return mDate;
     }
 
@@ -22,7 +25,9 @@ public class Pushup {
         return mCount;
     }
 
-    public void setDate(Date mDate) {
+    public void setId(int mId) { this.mId = mId; }
+
+    public void setDate(String mDate) {
         this.mDate = mDate;
     }
 
