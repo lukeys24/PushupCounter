@@ -52,13 +52,10 @@ public class PushupList {
         String dateToday = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         if (range.equals("Past Week")) {
             return " WHERE date BETWEEN '" + getPastDateString(-7) + "' AND '" + dateToday + "'";
-
         } else if (range.equals("Past Month")) {
             return " WHERE date BETWEEN '" + getPastDateString(-30) + "' AND '" + dateToday + "'";
-
         } else if (range.equals("Past Year")) {
             return " WHERE date BETWEEN '" + getPastDateString(-365) + "' AND '" + dateToday + "'";
-
         }
         // Return all records
         return "";

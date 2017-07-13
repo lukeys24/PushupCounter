@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class HistoryListFragment extends Fragment {
 
             mCountTextView.setText(Integer.toString(mPushup.getCount()));
             mDateTextView.setText(mPushup.getDate());
+
         }
 
         public PushupHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -76,7 +78,9 @@ public class HistoryListFragment extends Fragment {
 
         mPushupRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI("");
+        Spinner spin = (Spinner) getActivity().findViewById(R.id.dateRangeSpinner);
+
+        updateUI(spin.getSelectedItem().toString());
 
         return v;
     }

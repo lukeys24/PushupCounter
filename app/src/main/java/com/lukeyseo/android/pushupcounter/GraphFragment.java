@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
+
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
@@ -37,29 +39,43 @@ public class GraphFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        Spinner spin = (Spinner) getActivity().findViewById(R.id.dateRangeSpinner);
+
+        updateUI(spin.getSelectedItem().toString());
+    }
+
+    public void updateUI(String range) {
         mLineChart = (LineChart) getActivity().findViewById(R.id.graph_display);
 
-        // Get list of all push ups
-        PushupList pushupList = PushupList.get(getActivity(), "");
+        removeDataSet();
+
+        addDataSet(range);
+
+        mLineChart.invalidate();
+    }
+
+    private void addDataSet(String range) {
+        // Get list of push ups in range
+        PushupList pushupList = PushupList.get(getActivity(), range);
         List<Pushup> pushups = pushupList.getPushups();
         String[] formatedDates = new String[pushups.size()];
 
         // Initialize list for data entries
         List<Entry> entries = new ArrayList<>();
 
-        int i = 0;
-        for (Pushup pushup : pushups) {
-            entries.add(new Entry(i, pushup.getCount()));
-
-            // Parse date so it's in the format '07-12' for month/day
-            String dateParsed = pushup.getDate();
-            dateParsed = dateParsed.substring(5);
-            formatedDates[i] = dateParsed;
-
-            i++;
-        }
-
         if (pushups.size() > 1) {
+            int i = 0;
+            for (Pushup pushup : pushups) {
+                entries.add(new Entry(i, pushup.getCount()));
+
+                // Parse date so it's in the format '07-12' for month/day
+                String dateParsed = pushup.getDate();
+                dateParsed = dateParsed.substring(5);
+                formatedDates[i] = dateParsed;
+
+                i++;
+            }
+
             // Set up data for plot
             LineDataSet dataSet = new LineDataSet(entries, "Label");
             LineData lineData = new LineData(dataSet);
@@ -79,10 +95,21 @@ public class GraphFragment extends Fragment {
             mLineChart.setData(lineData);
         }
 
-        mLineChart.invalidate();
+        mLineChart.notifyDataSetChanged();
     }
 
-    public class MyXAxisValueFormatter implements IAxisValueFormatter {
+    private void removeDataSet() {
+        LineData data = mLineChart.getData();
+
+        if (data != null) {
+            data.removeDataSet(data.getDataSetByIndex(data.getDataSetCount() - 1));
+
+            mLineChart.notifyDataSetChanged();
+            mLineChart.invalidate();
+        }
+    }
+
+    private class MyXAxisValueFormatter implements IAxisValueFormatter {
 
         private String[] mValues;
 
