@@ -35,15 +35,29 @@ public class HistoryActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String word = parent.getItemAtPosition(position).toString();
-                Toast.makeText(HistoryActivity.this, word, Toast.LENGTH_LONG).show();
-                if (word.equals("All Time")) {
-                    
-                } else if (word.equals("This Week")) {
 
-                } else if (word.equals("This Month")) {
+                Fragment frag = fm.findFragmentById(R.id.fragment_container);
 
-                } else if (word.equals("This Year")) {
+                if (frag instanceof  HistoryListFragment) {
+                    if (word.equals("All Time")) {
+                        ((HistoryListFragment) frag).updateUI("");
+                    } else if (word.equals("Past Week")) {
+                        ((HistoryListFragment) frag).updateUI(word);
+                    } else if (word.equals("Past Month")) {
+                        ((HistoryListFragment) frag).updateUI(word);
+                    } else if (word.equals("Past Year")) {
+                        ((HistoryListFragment) frag).updateUI(word);
+                    }
+                } else if (frag instanceof  GraphFragment) {
+                    if (word.equals("All Time")) {
 
+                    } else if (word.equals("Past Week")) {
+
+                    } else if (word.equals("Past Month")) {
+
+                    } else if (word.equals("Past Year")) {
+
+                    }
                 }
             }
 
@@ -74,7 +88,7 @@ public class HistoryActivity extends AppCompatActivity {
             fragmentDisplay = new HistoryListFragment();
 
             // Creates and commits a fragment transaction
-            fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay).commit();
+            fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay, "LIST_FRAGMENT").commit();
         }
 
         mListButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +99,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                 fragmentDisplay = new HistoryListFragment();
 
-                fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay).commit();
+                fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay, "LIST_FRAGMENT").commit();
             }
         });
 
@@ -97,7 +111,7 @@ public class HistoryActivity extends AppCompatActivity {
 
                 fragmentDisplay = new GraphFragment();
 
-                fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay).commit();
+                fm.beginTransaction().add(R.id.fragment_container, fragmentDisplay, "GRAPH_FRAGMENT").commit();
             }
         });
     }

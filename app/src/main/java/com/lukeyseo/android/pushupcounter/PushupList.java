@@ -31,30 +31,43 @@ public class PushupList {
     private PushupList(Context context, String dateRange) {
         mPushups = new ArrayList<>();
 
+        createDatabase(context);
+
+        // Get query we will use for
+        String query = "SELECT * FROM pushups" + getRangeQuery(dateRange);
+
+        storeEntries(context, query);
+    }
+
+    private void createDatabase(Context context) {
         try {
             pushupDB = context.openOrCreateDatabase("MyPushups", MODE_PRIVATE, null);
             pushupDB.execSQL("CREATE TABLE IF NOT EXISTS pushups " +
                     "(id integer primary key, date VARCHAR, pushCount INTEGER);");
-            ////Check if DB exists
-            //File database = getApplicationContext().getDatabasePath("MyPushups.db");
-            //if (!database.exists()) {
-            //    Toast.makeText(this, "Database Created", Toast.LENGTH_LONG).show();
-            //} else {
-            //    Toast.makeText(this, "Database Missing", Toast.LENGTH_LONG).show();
-            //}*/
 
         } catch(Exception e) {
             Log.e("CONTACTS ERROR", "Error creating DB");
         }
+    }
 
+    private String getRangeQuery(String range) {
         String dateToday = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        if (range.equals("Past Week")) {
+            return " WHERE date BETWEEN '" + getPastDateString(-7) + "' AND '" + dateToday + "'";
 
+        } else if (range.equals("Past Month")) {
+            return " WHERE date BETWEEN '" + getPastDateString(-30) + "' AND '" + dateToday + "'";
 
-        String dateR =  " WHERE date BETWEEN '2017-07-10' AND '2017-07-11'";
-        dateR = " WHERE date BETWEEN '" + getPastWeekString() + "' AND '" + dateToday + "'";
+        } else if (range.equals("Past Year")) {
+            return " WHERE date BETWEEN '" + getPastDateString(-365) + "' AND '" + dateToday + "'";
 
+        }
+        // Return all records
+        return "";
+    }
 
-        Cursor cursor = pushupDB.rawQuery("SELECT * FROM pushups" + dateR, null);
+    private void storeEntries(Context context, String query) {
+        Cursor cursor = pushupDB.rawQuery(query, null);
 
         int idColumn = cursor.getColumnIndex("id");
         int dateColumn = cursor.getColumnIndex("date");
@@ -78,18 +91,18 @@ public class PushupList {
         }
     }
 
+    private String getPastDateString(int days) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(pastDate(days));
+    }
+
+    private Date pastDate(int days) {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, days);
+        return cal.getTime();
+    }
+
     public List<Pushup> getPushups() {
         return mPushups;
-    }
-
-    private String getPastWeekString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(pastWeek());
-    }
-
-    private Date pastWeek() {
-        final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -7);
-        return cal.getTime();
     }
 }

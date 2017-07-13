@@ -76,13 +76,13 @@ public class HistoryListFragment extends Fragment {
 
         mPushupRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        updateUI("");
 
         return v;
     }
 
-    private void updateUI() {
-        PushupList pushupList = PushupList.get(getActivity(), "");
+    public void updateUI(String range) {
+        PushupList pushupList = PushupList.get(getActivity(), range);
         List<Pushup> pushups = pushupList.getPushups();
 
         mAdapter = new PushupAdapter(pushups);
