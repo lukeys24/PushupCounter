@@ -6,7 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -17,19 +21,14 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PushupList {
 
-    private static PushupList sPushupList;
     private List<Pushup> mPushups;
     private SQLiteDatabase pushupDB;
 
-    public static PushupList get(Context context) {
-        if (sPushupList == null) {
-            sPushupList = new PushupList(context);
-        }
-
-        return sPushupList;
+    public static PushupList get(Context context, String dateRange) {
+        return new PushupList(context, dateRange);
     }
 
-    private PushupList(Context context) {
+    private PushupList(Context context, String dateRange) {
         mPushups = new ArrayList<>();
 
         try {
@@ -48,17 +47,21 @@ public class PushupList {
             Log.e("CONTACTS ERROR", "Error creating DB");
         }
 
-        Cursor cursor = pushupDB.rawQuery("SELECT * FROM pushups", null);
+        String dateToday = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+
+        String dateR =  " WHERE date BETWEEN '2017-07-10' AND '2017-07-11'";
+        dateR = " WHERE date BETWEEN '" + getPastWeekString() + "' AND '" + dateToday + "'";
+
+
+        Cursor cursor = pushupDB.rawQuery("SELECT * FROM pushups" + dateR, null);
 
         int idColumn = cursor.getColumnIndex("id");
         int dateColumn = cursor.getColumnIndex("date");
         int pushColumn = cursor.getColumnIndex("pushCount");
 
-        cursor.moveToFirst();
-
-
         // Checks we at least have 1 result
-        if (cursor != null && (cursor.getColumnCount() > 0)) {
+        if (cursor.moveToFirst() && (cursor.getColumnCount() > 0)) {
             do {
                 Pushup pushup = new Pushup();
 
@@ -77,5 +80,16 @@ public class PushupList {
 
     public List<Pushup> getPushups() {
         return mPushups;
+    }
+
+    private String getPastWeekString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(pastWeek());
+    }
+
+    private Date pastWeek() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -7);
+        return cal.getTime();
     }
 }

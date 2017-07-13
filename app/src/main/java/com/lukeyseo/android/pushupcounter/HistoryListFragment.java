@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -21,8 +22,22 @@ public class HistoryListFragment extends Fragment {
 
     // View holder for Recycler View to display each individual pushup
     private class PushupHolder extends RecyclerView.ViewHolder {
+        private TextView mCountTextView;
+        private TextView mDateTextView;
+        private Pushup mPushup;
+
+        public void bind(Pushup pushup) {
+            mPushup = pushup;
+
+            mCountTextView.setText(Integer.toString(mPushup.getCount()));
+            mDateTextView.setText(mPushup.getDate());
+        }
+
         public PushupHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_pushup, parent, false));
+
+            mCountTextView = (TextView) itemView.findViewById(R.id.pushup_count);
+            mDateTextView = (TextView) itemView.findViewById(R.id.pushup_date);
         }
     }
 
@@ -42,7 +57,8 @@ public class HistoryListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PushupHolder holder, int position) {
-
+            Pushup pushup = mPushups.get(position);
+            holder.bind(pushup);
         }
 
         @Override
@@ -54,7 +70,6 @@ public class HistoryListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_history_list, container, false);
 
         mPushupRecyclerView = (RecyclerView) v.findViewById(R.id.pushup_recycler_view);
@@ -67,7 +82,7 @@ public class HistoryListFragment extends Fragment {
     }
 
     private void updateUI() {
-        PushupList pushupList = PushupList.get(getActivity());
+        PushupList pushupList = PushupList.get(getActivity(), "");
         List<Pushup> pushups = pushupList.getPushups();
 
         mAdapter = new PushupAdapter(pushups);

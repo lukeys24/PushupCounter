@@ -196,13 +196,6 @@ public class CountFragment extends Fragment implements SensorEventListener {
             pushupDB = this.getActivity().openOrCreateDatabase("MyPushups", MODE_PRIVATE, null);
             pushupDB.execSQL("CREATE TABLE IF NOT EXISTS pushups " +
                     "(id integer primary key, date VARCHAR, pushCount INTEGER);");
-            ////Check if DB exists
-            //File database = getApplicationContext().getDatabasePath("MyPushups.db");
-            //if (!database.exists()) {
-            //    Toast.makeText(this, "Database Created", Toast.LENGTH_LONG).show();
-            //} else {
-            //    Toast.makeText(this, "Database Missing", Toast.LENGTH_LONG).show();
-            //}*/
 
         } catch(Exception e) {
             Log.e("CONTACTS ERROR", "Error creating DB");
@@ -213,7 +206,9 @@ public class CountFragment extends Fragment implements SensorEventListener {
     private void addData(int count) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(new Date());
-        pushupDB.execSQL("INSERT INTO pushups (date, pushCount) VALUES ('"+
+
+
+        pushupDB.execSQL("INSERT INTO pushups (date, pushCount) VALUES ('" +
                 date + "', '" + count + "');");
     }
 
