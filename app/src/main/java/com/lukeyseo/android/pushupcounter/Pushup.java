@@ -1,7 +1,5 @@
 package com.lukeyseo.android.pushupcounter;
 
-import java.util.Date;
-
 /**
  * Created by Luke on 7/10/17.
  */
@@ -11,9 +9,7 @@ public class Pushup {
     private String mDate;
     private int mCount;
 
-    public Pushup() {
-
-    }
+    public Pushup() { }
 
     public int getId() { return mId; }
 

@@ -7,37 +7,50 @@
     android:layout_height="match_parent"
     android:gravity="center|center_vertical">
 
-    <com.beardedhen.androidbootstrap.AwesomeTextView
-        android:id="@+id/scoreView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:bootstrapBrand="success"
-        />
+    <com.github.pavlospt.CircleView
+        android:id="@+id/circleView"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
+        app:cv_titleText="title"
+        app:cv_titleSize="40sp"
+        app:cv_titleColor="@color/bootstrap_gray_dark"
+        app:cv_subtitleColor="@color/bootstrap_gray_dark"
+        app:cv_strokeColorValue="@color/bootstrap_gray_dark"
+        app:cv_backgroundColorValue="@color/blue_btn_bg_color"
+        app:cv_fillColor="@color/blue_btn_bg_color"
+        app:cv_fillRadius="0.9"
+        app:cv_strokeWidthSize="1" />
 
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/counterButton"
+    <LinearLayout
+        android:layout_margin="10sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:bootstrapBrand="success"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        app:showOutline="true"
-        app:roundedCorners="true"
-        android:layout_marginTop="100sp"
-        android:layout_marginBottom="200sp"
-        android:clickable="false"
-        />
+        android:layout_height="wrap_content">
 
-    <com.beardedhen.androidbootstrap.BootstrapButton
-        android:id="@+id/beginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Begin"
-        app:bootstrapBrand="success"
-        app:bootstrapSize="lg"
-        app:buttonMode="regular"
-        app:showOutline="false"
-        app:roundedCorners="true"
-        />
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/scoreView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:clickable="false"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:showOutline="true"
+            app:roundedCorners="true" />
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/beginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp"
+            android:text="Begin"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:showOutline="false"
+            app:roundedCorners="true" />
+    </LinearLayout>
+
 
 </LinearLayout>

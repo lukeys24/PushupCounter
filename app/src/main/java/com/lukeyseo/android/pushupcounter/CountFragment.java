@@ -2,7 +2,6 @@ package com.lukeyseo.android.pushupcounter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -15,13 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.github.pavlospt.CircleView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,9 +27,9 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class CountFragment extends Fragment implements SensorEventListener {
-    private BootstrapButton mCountButton;
     private BootstrapButton mBeginButton;
-    private AwesomeTextView mScoreView;
+    private BootstrapButton mScoreView;
+    private CircleView mCircleView;
 
     private static final String KEY_INDEX_PUSHUPS = "indexPushups";
     private static final String KEY_INDEX_COUNTING = "indexCounting";
@@ -57,9 +54,9 @@ public class CountFragment extends Fragment implements SensorEventListener {
         mSensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
-        mCountButton = (BootstrapButton) v.findViewById(R.id.counterButton);
         mBeginButton = (BootstrapButton) v.findViewById(R.id.beginButton);
-        mScoreView = (AwesomeTextView) v.findViewById(R.id.scoreView);
+        mScoreView = (BootstrapButton) v.findViewById(R.id.scoreView);
+        mCircleView = (CircleView) v.findViewById(R.id.circleView);
 
         mBeginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,6 +130,7 @@ public class CountFragment extends Fragment implements SensorEventListener {
             // Variable to pass count into SweetAlertDialog
             final int passInnerCount = mPushupCount;
 
+
             new SweetAlertDialog(this.getActivity())
                     .setTitleText(mPushupCount + " Pushups!")
                     .setContentText("Do you want to save your results?")
@@ -142,12 +140,18 @@ public class CountFragment extends Fragment implements SensorEventListener {
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
                             createDatabase();
                             addData(passInnerCount);
-                            //getData();
                             sweetAlertDialog.dismissWithAnimation();
+
+                            if (passInnerCount > mHighScore) {
+                                saveHighscore(passInnerCount);
+                            }
+
+                            mPushupCount = 0;
+                            updateScore();
 
                             new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("Stored your results!")
-                                    .show();
+                                    .dismiss();
 
                         }
                     })
@@ -155,32 +159,30 @@ public class CountFragment extends Fragment implements SensorEventListener {
                     .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sweetAlertDialog) {
+
+                            mPushupCount = 0;
+                            updateScore();
+
                             sweetAlertDialog.cancel();
                         }
                     })
                     .show();
-
-            if (mPushupCount > mHighScore) {
-                saveHighscore();
-            }
-
-            mPushupCount = 0;
-            updateScore();
         }
     }
 
     // Updates text to reflect current score
     private void updateScore() {
-        mScoreView.setText("High Score : " + mHighScore);
-        mCountButton.setText("Current Number : " + mPushupCount);
+        mScoreView.setText("Best : " + mHighScore);
+        mCircleView.setTitleText(Integer.toString(mPushupCount));
+        mCircleView.setShowSubtitle(false);
     }
 
     // Saves new highscore using preference
-    private void saveHighscore() {
-        mHighScore = mPushupCount;
+    private void saveHighscore(int newHigh) {
+        mHighScore = newHigh;
         SharedPreferences prefs = this.getActivity().getSharedPreferences("myScorePrefs", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = prefs.edit();
-        prefsEditor.putInt("highscore", mPushupCount);
+        prefsEditor.putInt("highscore", newHigh);
         prefsEditor.apply();
     }
 
@@ -211,34 +213,4 @@ public class CountFragment extends Fragment implements SensorEventListener {
         pushupDB.execSQL("INSERT INTO pushups (date, pushCount) VALUES ('" +
                 date + "', '" + count + "');");
     }
-
-    // Retrieves/prints all data from database
-    private void getData() {
-        Cursor cursor = pushupDB.rawQuery("SELECT * FROM pushups", null);
-
-        int idColumn = cursor.getColumnIndex("id");
-        int dateColumn = cursor.getColumnIndex("date");
-        int pushColumn = cursor.getColumnIndex("pushCount");
-
-        cursor.moveToFirst();
-
-        String dateList = "";
-
-        // Checks we at least have 1 result
-        if (cursor != null && (cursor.getColumnCount() > 0)) {
-            do {
-                int id = cursor.getInt(idColumn);
-                String date = cursor.getString(dateColumn);
-                int count = cursor.getInt(pushColumn);
-
-                dateList += id + " : " + date + " : " + count + "\n";
-
-            } while (cursor.moveToNext());
-
-            Log.v("RESULTS", dateList);
-        } else {
-            Toast.makeText(this.getActivity(), "No Results to Show", Toast.LENGTH_LONG).show();
-        }
-    }
-
 }

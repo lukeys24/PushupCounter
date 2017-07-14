@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.AwesomeTextView;
+
 import java.util.List;
 
 /**
@@ -23,8 +25,8 @@ public class HistoryListFragment extends Fragment {
 
     // View holder for Recycler View to display each individual pushup
     private class PushupHolder extends RecyclerView.ViewHolder {
-        private TextView mCountTextView;
-        private TextView mDateTextView;
+        private AwesomeTextView mCountTextView;
+        private AwesomeTextView mDateTextView;
         private Pushup mPushup;
 
         public void bind(Pushup pushup) {
@@ -38,8 +40,8 @@ public class HistoryListFragment extends Fragment {
         public PushupHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_pushup, parent, false));
 
-            mCountTextView = (TextView) itemView.findViewById(R.id.pushup_count);
-            mDateTextView = (TextView) itemView.findViewById(R.id.pushup_date);
+            mCountTextView = (AwesomeTextView) itemView.findViewById(R.id.pushup_count);
+            mDateTextView = (AwesomeTextView) itemView.findViewById(R.id.pushup_date);
         }
     }
 

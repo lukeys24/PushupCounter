@@ -18,27 +18,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pushup"
-            app:bootstrapBrand="success"
-            app:bootstrapSize="lg"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="xl"
             app:buttonMode="regular"
             app:showOutline="false"
             app:roundedCorners="true"
             android:layout_marginRight="10sp"
-            android:id="@+id/start_pushup"
-            />
+            android:id="@+id/start_pushup" />
 
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="History"
-            app:bootstrapBrand="success"
-            app:bootstrapSize="lg"
+            app:bootstrapBrand="primary"
+            app:bootstrapSize="xl"
             app:buttonMode="regular"
             app:showOutline="false"
             app:roundedCorners="true"
             android:layout_marginLeft="10sp"
-            android:id="@+id/start_history"
-            />
+            android:id="@+id/start_history" />
 
     </LinearLayout>
 
