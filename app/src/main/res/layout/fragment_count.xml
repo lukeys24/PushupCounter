@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     android:gravity="center|center_vertical">
 
+    <com.beardedhen.androidbootstrap.AwesomeTextView
+        android:layout_margin="10sp"
+        android:id="@+id/scoreViewToday"
+        android:text="Today : "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.github.pavlospt.CircleView
         android:id="@+id/circleView"
         xmlns:app="http://schemas.android.com/apk/res-auto"

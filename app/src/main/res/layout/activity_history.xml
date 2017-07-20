@@ -14,6 +14,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:checked="true"
+                android:id="@+id/radioIndividualEntry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/radioDailyEntry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
+
         <com.beardedhen.androidbootstrap.BootstrapButton
             android:text="List"
             android:id="@+id/list_button"

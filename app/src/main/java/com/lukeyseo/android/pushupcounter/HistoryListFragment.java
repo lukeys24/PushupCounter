@@ -8,12 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Luke on 7/11/17.
@@ -91,7 +95,32 @@ public class HistoryListFragment extends Fragment {
         PushupList pushupList = PushupList.get(getActivity(), range);
         List<Pushup> pushups = pushupList.getPushups();
 
-        mAdapter = new PushupAdapter(pushups);
+        // Code to set pushup list for day, not individual entries
+        Map<String, Integer> pushupMap = new HashMap<>();
+        for (Pushup pushup : pushups) {
+            if (!pushupMap.containsKey(pushup.getDate())) {
+                pushupMap.put(pushup.getDate(), pushup.getCount());
+            } else {
+                pushupMap.put(pushup.getDate(), pushupMap.get(pushup.getDate()) + pushup.getCount());
+            }
+        }
+        List<Pushup> dailyPushups = new ArrayList<Pushup>();
+        for (Map.Entry<String, Integer> entry : pushupMap.entrySet()) {
+            Pushup tempPush = new Pushup();
+            tempPush.setDate(entry.getKey());
+            tempPush.setCount(entry.getValue());
+
+            dailyPushups.add(tempPush);
+        }
+
+        // Check whether to display entries by each individual or daily
+        RadioButton buttonDaily = (RadioButton) getActivity().findViewById(R.id.radioIndividualEntry);
+        if (buttonDaily.isChecked()) {
+            mAdapter = new PushupAdapter(pushups);
+        } else {
+            mAdapter = new PushupAdapter(dailyPushups);
+        }
+
         mPushupRecyclerView.setAdapter(mAdapter);
     }
 

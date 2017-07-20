@@ -9,6 +9,4 @@
     android:gravity="center|center_vertical"
     tools:context="com.lukeyseo.android.pushupcounter.CountActivity">
 
-
-
 </LinearLayout>

@@ -19,6 +19,8 @@ import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.github.pavlospt.CircleView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import static android.content.Context.MODE_PRIVATE;
 
@@ -30,6 +32,7 @@ public class CountFragment extends Fragment implements SensorEventListener {
     private BootstrapButton mBeginButton;
     private BootstrapButton mScoreView;
     private CircleView mCircleView;
+    private AwesomeTextView mScoreViewToday;
 
     private static final String KEY_INDEX_PUSHUPS = "indexPushups";
     private static final String KEY_INDEX_COUNTING = "indexCounting";
@@ -57,6 +60,7 @@ public class CountFragment extends Fragment implements SensorEventListener {
         mBeginButton = (BootstrapButton) v.findViewById(R.id.beginButton);
         mScoreView = (BootstrapButton) v.findViewById(R.id.scoreView);
         mCircleView = (CircleView) v.findViewById(R.id.circleView);
+        mScoreViewToday = (AwesomeTextView) v.findViewById(R.id.scoreViewToday);
 
         mBeginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +179,25 @@ public class CountFragment extends Fragment implements SensorEventListener {
         mScoreView.setText("Best : " + mHighScore);
         mCircleView.setTitleText(Integer.toString(mPushupCount));
         mCircleView.setShowSubtitle(false);
+        updateTodayView();
+    }
+
+    // Set view for today count
+    private void updateTodayView() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+
+        PushupList pushupList = PushupList.get(getActivity(), "");
+        List<Pushup> pushups = pushupList.getPushups();
+        int todayCount = 0;
+
+        for (Pushup pushup : pushups) {
+            if (pushup.getDate().equals(date)) {
+                todayCount += pushup.getCount();
+            }
+        }
+
+        mScoreViewToday.setText("Today : " + todayCount);
     }
 
     // Saves new highscore using preference

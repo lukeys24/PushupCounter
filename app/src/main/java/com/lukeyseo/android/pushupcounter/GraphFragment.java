@@ -6,10 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -18,7 +20,9 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Luke on 7/10/17.
@@ -57,7 +61,33 @@ public class GraphFragment extends Fragment {
     private void addDataSet(String range) {
         // Get list of push ups in range
         PushupList pushupList = PushupList.get(getActivity(), range);
+
         List<Pushup> pushups = pushupList.getPushups();
+
+        // Code to set pushup list for day, not individual entries
+        Map<String, Integer> pushupMap = new HashMap<>();
+        for (Pushup pushup : pushups) {
+            if (!pushupMap.containsKey(pushup.getDate())) {
+                pushupMap.put(pushup.getDate(), pushup.getCount());
+            } else {
+                pushupMap.put(pushup.getDate(), pushupMap.get(pushup.getDate()) + pushup.getCount());
+            }
+        }
+        List<Pushup> dailyPushups = new ArrayList<Pushup>();
+        for (Map.Entry<String, Integer> entry : pushupMap.entrySet()) {
+            Pushup tempPush = new Pushup();
+            tempPush.setDate(entry.getKey());
+            tempPush.setCount(entry.getValue());
+
+            dailyPushups.add(tempPush);
+        }
+
+        // Check whether to display entries by each individual or daily
+        RadioButton buttonDaily = (RadioButton) getActivity().findViewById(R.id.radioIndividualEntry);
+        if (!buttonDaily.isChecked()) {
+            pushups = dailyPushups;
+        }
+
         String[] formatedDates = new String[pushups.size()];
 
         // Initialize list for data entries
@@ -93,6 +123,11 @@ public class GraphFragment extends Fragment {
             yAxis.setEnabled(false);
 
             mLineChart.setData(lineData);
+            mLineChart.setDescription(null);
+        } else {
+            Description desc = new Description();
+            desc.setText("Need at least 2 entries.");
+            mLineChart.setDescription(desc);
         }
 
         mLineChart.notifyDataSetChanged();

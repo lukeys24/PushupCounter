@@ -12,7 +12,6 @@ public class CountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_count);
 
-
         FragmentManager fm = getSupportFragmentManager();
 
         // Check if fragment already exists
