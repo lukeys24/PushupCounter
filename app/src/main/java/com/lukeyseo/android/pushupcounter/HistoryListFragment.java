@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +113,7 @@ public class HistoryListFragment extends Fragment {
 
             dailyPushups.add(tempPush);
         }
+        Collections.sort(dailyPushups);
 
         // Check whether to display entries by each individual or daily
         RadioButton buttonDaily = (RadioButton) getActivity().findViewById(R.id.radioIndividualEntry);

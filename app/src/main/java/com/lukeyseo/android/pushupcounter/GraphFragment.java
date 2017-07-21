@@ -20,6 +20,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +75,7 @@ public class GraphFragment extends Fragment {
                 pushupMap.put(pushup.getDate(), pushupMap.get(pushup.getDate()) + pushup.getCount());
             }
         }
-        List<Pushup> dailyPushups = new ArrayList<Pushup>();
+        List<Pushup> dailyPushups = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : pushupMap.entrySet()) {
             Pushup tempPush = new Pushup();
             tempPush.setDate(entry.getKey());
@@ -81,6 +83,7 @@ public class GraphFragment extends Fragment {
 
             dailyPushups.add(tempPush);
         }
+        Collections.sort(dailyPushups);
 
         // Check whether to display entries by each individual or daily
         RadioButton buttonDaily = (RadioButton) getActivity().findViewById(R.id.radioIndividualEntry);
